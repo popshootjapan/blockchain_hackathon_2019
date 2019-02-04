@@ -75,6 +75,12 @@ module.exports = {
       // network_id: 2111,   // This network is yours, in the cloud.
       // production: true    // Treats this network as if it was a public net. (default: false)
     // }
+    getho: {
+      host: "sassy-shark-77728.getho.io/jsonrpc",
+      port: 80,
+      network_id: 1010,
+      gas: 4712388
+    }
   },
 
   // Set default mocha options here, use special reporters etc.

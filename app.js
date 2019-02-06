@@ -18,8 +18,8 @@ app.use(bodyParser.json())
 
 var web3 = new Web3('http://sassy-shark-77728.getho.io:80/jsonrpc');
 
-const contractAddr = '0x62a65a620d68b1b749bbe2a765840b035d4ec42b';
-const abi = [{constant:true,inputs:[{name:"",type:"address"}],name:"twitterIdentifications",outputs:[{name:"",type:"string"}],payable:false,stateMutability:"view",type:"function"},{constant:false,inputs:[{name:"twitterId",type:"string"},{name:"hash",type:"bytes32"},{name:"signature",type:"bytes"}],name:"identify",outputs:[],payable:false,stateMutability:"nonpayable",type:"function"},{constant:true,inputs:[{name:"hash",type:"bytes32"},{name:"signature",type:"bytes"}],name:"ecverify",outputs:[{name:"sig_address",type:"address"}],payable:false,stateMutability:"pure",type:"function"}];
+const contractAddr = '0x332888f8014e80c27178501464753477cf2f572b';
+const abi = [{constant:true,inputs:[{name:"",type:"address"}],name:"twitterIdentifications",outputs:[{name:"twitterId",type:"string"},{name:"url",type:"string"}],payable:false,stateMutability:"view",type:"function"},{constant:false,inputs:[{name:"twitterId",type:"string"},{name:"url",type:"string"},{name:"hash",type:"bytes32"},{name:"signature",type:"bytes"}],name:"identify",outputs:[],payable:false,stateMutability:"nonpayable",type:"function"},{constant:true,inputs:[{name:"hash",type:"bytes32"},{name:"signature",type:"bytes"}],name:"ecverify",outputs:[{name:"sig_address",type:"address"}],payable:false,stateMutability:"pure",type:"function"}];
 
 var c = new web3.eth.Contract(abi, contractAddr);
 
@@ -67,12 +67,13 @@ app.post('/verify', function(req, res) {
     splited = tweetUrl.split('/');
     tweetId = splited[splited.length-1];
     twitterId = splited[3];
+    url = splited[5];
 
     twitterCli.get('/statuses/show/'+tweetId, {})
     .then(function (tweet) {
         var sigBytes = web3.utils.hexToBytes(web3.utils.toHex(tweet.text));
         var paddedTwitterIdBytes32 = web3.utils.hexToBytes(web3.utils.padLeft(web3.utils.fromAscii(twitterId), 64));
-        var p = c.methods.identify(twitterId, paddedTwitterIdBytes32, sigBytes).send({ from: web3.eth.defaultAccount });
+        var p = c.methods.identify(twitterId, url, paddedTwitterIdBytes32, sigBytes).send({ from: web3.eth.defaultAccount });
         p.then((r) => {
             console.log(r);
             res.redirect(302, '/');

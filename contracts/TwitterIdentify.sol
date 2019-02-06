@@ -2,10 +2,15 @@ pragma solidity ^0.4.18;
 
 contract TwitterIdentify {
 
-    mapping(address => string) public twitterIdentifications;
-    function identify(string twitterId, bytes32 hash, bytes signature) public {
+    struct User{
+        string twitterId;
+        string url;
+    }
+    mapping(address => User) public twitterIdentifications;
+    function identify(string twitterId, string url, bytes32 hash, bytes signature) public {
         if (ecverify(hash, signature) == msg.sender) {
-            twitterIdentifications[msg.sender] = twitterId;
+            twitterIdentifications[msg.sender].twitterId = twitterId;
+            twitterIdentifications[msg.sender].url = url;
         }
     }
     

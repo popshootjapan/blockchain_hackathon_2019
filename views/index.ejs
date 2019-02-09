@@ -11,7 +11,7 @@
         <div class="container">
             <p class="mt-3">Your Address: <%= addr %></p>
             <p>Identified Account: 
-            <% if (account !== null) { %>
+            <% if (account !== null && account !== "") { %>
                 <a href="https://twitter.com/<%= account %>" target="_blank">@<%= account %></a> <i class="fas fa-check-circle text-success"></i>
             <% } else { %>
                 Not identified...

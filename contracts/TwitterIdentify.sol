@@ -1,17 +1,17 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.5.0;
 
 contract TwitterIdentify {
 
     // アドレスとTwitterアカウントIDのmapping
     mapping(address => string) public twitterIdentifications;
 
-    function identify(string twitterId, bytes32 hash, bytes signature) public {
+    function identify(string memory twitterId, bytes32 hash, bytes memory signature) public {
         if (ecverify(hash, signature) == msg.sender) {
             twitterIdentifications[msg.sender] = twitterId;
         }
     }
     
-    function ecverify(bytes32 hash, bytes signature) internal pure returns(address sig_address) {
+    function ecverify(bytes32 hash, bytes memory signature) internal pure returns(address sig_address) {
         require(signature.length == 65);
 
         bytes32 r;
@@ -29,11 +29,11 @@ contract TwitterIdentify {
         }
 
         bytes memory prefix = "\x19Ethereum Signed Message:\n32";
-        bytes32 prefixedHash = keccak256(prefix, hash);
+        bytes32 prefixedHash = keccak256(abi.encodePacked(prefix, hash));
 
         require(v == 27 || v == 28);
         sig_address = ecrecover(prefixedHash, v, r, s);
 
-        require(sig_address != 0x0);
+        require(sig_address != address(0));
     }
 }

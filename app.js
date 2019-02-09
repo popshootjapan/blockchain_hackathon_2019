@@ -18,7 +18,7 @@ app.use(bodyParser.json())
 
 var web3 = new Web3('http://<YOUR SUBDOMAIN>.getho.io:80/jsonrpc');
 
-const contractAddr = '<CONTRACT ADDRESS>';
+const contractAddr = '<CONTRACT ADRESS>';
 const abi = [{constant:true,inputs:[{name:"",type:"address"}],name:"twitterIdentifications",outputs:[{name:"",type:"string"}],payable:false,stateMutability:"view",type:"function"},{constant:false,inputs:[{name:"twitterId",type:"string"},{name:"hash",type:"bytes32"},{name:"signature",type:"bytes"}],name:"identify",outputs:[],payable:false,stateMutability:"nonpayable",type:"function"},{constant:true,inputs:[{name:"hash",type:"bytes32"},{name:"signature",type:"bytes"}],name:"ecverify",outputs:[{name:"sig_address",type:"address"}],payable:false,stateMutability:"pure",type:"function"}];
 
 var c = new web3.eth.Contract(abi, contractAddr);
